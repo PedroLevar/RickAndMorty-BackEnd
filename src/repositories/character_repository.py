@@ -18,3 +18,31 @@ class CharacterRepository:
         except Exception:
             db.session.rollback()
             raise
+
+    def create_character(self, character):
+        try:
+            db.session.add(character)
+            db.session.commit()
+            return character
+        except Exception:
+            db.session.rollback()
+            raise
+
+    def delete_character(self, character):
+        try:
+            db.session.delete(character)
+            db.session.commit()
+            return character
+        except Exception:
+            db.session.rollback()
+            raise
+
+    def delete_character(self, character, data):
+        try:
+            for key, value in data.items():
+                setattr(character, key, value)
+            db.session.commit()
+            return character
+        except Exception:
+            db.session.rollback()
+            raise

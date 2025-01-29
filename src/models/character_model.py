@@ -11,12 +11,23 @@ class Character(db.Model):
 def __repr__(self):
     return f"<Character {self.name})>"
 
-
 class CharacterOutput(ma.Schema):
     id = ma.Integer()
     name = ma.String()
     status = ma.String()
     species = ma.String()
 
+class CharacterInput(ma.Schema): 
+    name = ma.String(required=True, validate=validate.Length(min=3, max=100))
+    status = ma.String(required=False, validate=validate.Length(max=50), allow_none=True)
+    species = ma.String(required=False, validate=validate.Length(max=100), allow_none=True)
+
+class CharacterInputUpdate(ma.Schema):
+    name = ma.String(required=False, validate=validate.Length(min=3, max=100))
+    status = ma.String(required=False, validate=validate.Length(max=50), allow_none=True)
+    species = ma.String(required=False, validate=validate.Length(max=100), allow_none=True)
+
+character_input = CharacterInput()
+character_input_update = CharacterInputUpdate()
 character_output = CharacterOutput()
 characters_output = CharacterOutput (many=True)
