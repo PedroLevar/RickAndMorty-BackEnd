@@ -62,5 +62,5 @@ class CharacterService:
         data = character_output.dump(updated_character)
 
         return {
-            "data": None
+            "data": data
         }

@@ -52,8 +52,7 @@ class CharacterController:
             return jsonify({
                 "erro": "personagem nao encontrado."
             }), 404
-        except Exception as e:
-            print(e)
+        except Exception:
             return jsonify({
                 "erro": "ocorreu um erro ao deletar personagem."
             }), 500

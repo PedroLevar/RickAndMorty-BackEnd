@@ -21,7 +21,7 @@ def create_character():
 def delete_character(id):
     return character_controller.delete_character(id)
 
-@character_bp.route('/<int:id', methods=['PATCH'])
+@character_bp.route('/<int:id>', methods=['PATCH'])
 def update_character(id):
     data = request.get_json()
     return character_controller.update_character(id, data)

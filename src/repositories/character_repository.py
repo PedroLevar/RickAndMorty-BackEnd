@@ -37,7 +37,7 @@ class CharacterRepository:
             db.session.rollback()
             raise
 
-    def delete_character(self, character, data):
+    def update_character(self, character, data):
         try:
             for key, value in data.items():
                 setattr(character, key, value)
