@@ -6,13 +6,13 @@ class CharacterController:
     def __init__(self):
         self.character_service = CharacterService()
 
-    def get_all_characters(self):
+    def get_all_characters(self, page, search_term):
         try:
-            data = self.character_service.get_all_characters()
+            data = self.character_service.get_all_characters(page, search_term)
             return jsonify(data), 200
         except Exception:
             return jsonify({
-                "erro": "ocorreu um erro."
+                "error": "an error occurred."
             }), 500
         
     def get_character(self, id):
@@ -21,9 +21,9 @@ class CharacterController:
             if data:
                 return jsonify(data), 200
             return jsonify({
-                "erro": "personagem nao encontrado."
+                "error": "character not found."
             }), 404
         except Exception:
             return jsonify({
-                "erro": "ocorreu um erro ao buscar o personagem."
+                "error": "An error occurred while searching for the character."
             }), 500
