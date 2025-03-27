@@ -1,5 +1,6 @@
-from flask import jsonify
+from werkzeug.exceptions import NotFound
 from src.services.character_service import CharacterService
+from src.utils.api_response import ApiResponse
 
 class CharacterController:
 
@@ -9,21 +10,15 @@ class CharacterController:
     def get_all_characters(self, page, search_term):
         try:
             data = self.character_service.get_all_characters(page, search_term)
-            return jsonify(data), 200
+            return ApiResponse.response(success=True, message="Personagens encontrados com Sucesso", data=data, status_code=200)
         except Exception:
-            return jsonify({
-                "error": "an error occurred."
-            }), 500
+            return ApiResponse.response(success=False, message="Erro ao encontrar Personagens", data=None, status_code=500)
         
     def get_character(self, id):
         try:
             data = self.character_service.get_character(id)
-            if data:
-                return jsonify(data), 200
-            return jsonify({
-                "error": "character not found."
-            }), 404
+            return ApiResponse.response(success=True, message="Personagem encontrado com Sucesso", data=data, status_code=200)
+        except NotFound:
+            return ApiResponse.response(success=False, message="Personagem não encontrado", data=None, status_code=404)
         except Exception:
-            return jsonify({
-                "error": "An error occurred while searching for the character."
-            }), 500
+            return ApiResponse.response(success=False, message="Erro ao encontrar Personagem", data=None, status_code=500)

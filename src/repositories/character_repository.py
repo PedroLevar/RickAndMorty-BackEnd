@@ -1,4 +1,5 @@
 from src.models import db
+import math
 from src.models.character_model import Character
 
 class CharacterRepository:
@@ -15,8 +16,9 @@ class CharacterRepository:
 
             characters = query.limit(per_page).offset(offset).all()
             total = query.count()
+            total_pages = math.ceil(total/per_page)
 
-            return characters, total
+            return characters, total_pages
         except Exception:
             db.session.rollback()
             raise

@@ -1,5 +1,4 @@
 from src.models import db, ma
-from marshmallow import post_dump
 
 class Character(db.Model):
     __tablename__ = 'character'
@@ -18,36 +17,33 @@ class Character(db.Model):
     location = db.relationship('Location', back_populates='character_location', uselist=False, lazy=True, foreign_keys=[location_id])
     episode = db.relationship('Episode', secondary='character_episode', back_populates='character')
 
+    @property
+    def last_seen(self):
+        """Retorna o último episódio em que o personagem apareceu"""
+        return self.episode[-1].air_date
+
     def __repr__(self):
         return f"<Character {self.name}>"
 
+# API Schemas
 class CharacterOutputGetAll(ma.Schema):
     id = ma.Integer()
     name = ma.String()
     status = ma.String()
     species = ma.String()
     image = ma.String()
-    
+
 class CharacterOutput(CharacterOutputGetAll):
     type = ma.String()
     gender = ma.String()
     origin = ma.Nested('LocationOutput', many=False)
     location = ma.Nested('LocationOutput', many=False)
+    last_seen = ma.String(attribute="last_seen")
 
 class CharacterPaginationOutput(ma.Schema):
-    data = ma.List(ma.Nested("CharacterOutputGetAll"))
+    characters = ma.List(ma.Nested("CharacterOutputGetAll"))
     page = ma.Integer()
-    total_items = ma.Integer()
-
-    def calculate_total_pages(self, total_items):
-        per_page = 20
-        return (total_items // per_page) + (1 if total_items % per_page > 0 else 0)
-    
-    @post_dump
-    def format_response(self, data, **kwargs):
-        data["total_pages"] = self.calculate_total_pages(data["total_items"])
-        data.pop("total_items")
-        return data
+    total_pages = ma.Integer()
 
 character_output = CharacterOutput()  
 character_pagination_output = CharacterPaginationOutput()

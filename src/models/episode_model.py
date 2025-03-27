@@ -18,6 +18,3 @@ class EpisodeOutput(ma.Schema):
     name = ma.String()
     air_date = ma.String()
     episode = ma.String()
-
-episode_output = EpisodeOutput()
-episodes_output = EpisodeOutput(many=True)
